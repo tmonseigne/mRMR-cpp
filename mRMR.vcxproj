@@ -145,7 +145,11 @@
   <ItemGroup>
     <ClCompile Include="dependencies\googletest\googlemock\src\gmock-all.cc" />
     <ClCompile Include="dependencies\googletest\googletest\src\gtest-all.cc" />
+    <ClCompile Include="src\CMRMR.cpp" />
     <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\CMRMR.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
