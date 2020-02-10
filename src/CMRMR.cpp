@@ -273,6 +273,7 @@ double CMRMR::mutualInfo(const size_t feature1, const size_t feature2) const
 ///-------------------------------------------------------------------------------------------------
 vector<size_t> CMRMR::mRMR(const size_t nFeatures, const EMRMRMethod method) const
 {
+	if (nFeatures == 0) { return vector<size_t>(); }
 	const size_t n = ((nFeatures < m_nFeatures) ? nFeatures : m_nFeatures);
 	vector<size_t> res(n);
 
