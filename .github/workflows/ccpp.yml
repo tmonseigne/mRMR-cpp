@@ -7,34 +7,39 @@ jobs:
     name: ${{ matrix.os }}-CI
     runs-on: ${{ matrix.os }}
 
-    # Configure Strategy (all os)
+##### Configure Strategy (all os)
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         include:
-          - os: windows-latest
-            triplet: x64-windows
+#          - os: windows-latest
+#            triplet: x64-windows
           - os: ubuntu-latest
             triplet: x64-linux
-          - os: macos-latest
-            triplet: x64-osx
+#          - os: macos-latest
+#            triplet: x64-osx
 
-
-    # Configure Steps
+###### Configure Steps
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Checkout submodules
-      shell: bash
-      run: |
-        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-        git submodule sync --recursive
-        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
-    - name: Checkout Dir
-      run: find ${{ runner.workspace }}
-      if: "!contains( matrix.os, 'windows')"
-    - name: dir
-      run: gci -recurse ${{ runner.workspace }}
-      if: contains( matrix.os, 'windows')
+      - name: Install packages
+        run: |
+          sudo apt-get install lcov
+          sudo apt-get install valgrind
+        if: "!contains( matrix.os, 'windows')"
+
+      - name: Checkout Dir
+        run: find ${{ runner.workspace }}
+        if: "!contains( matrix.os, 'windows')"
+#     - name: Checkout Dir
+#       run: gci -recurse ${{ runner.workspace }}
+#       if: contains( matrix.os, 'windows')
