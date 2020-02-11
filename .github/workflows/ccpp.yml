@@ -51,3 +51,27 @@ jobs:
           mkdir -p build && cd build
           cmake -DCODE_COVERAGE=ON ..
           cmake --build . 
+
+      - name: Running (with Valgrind)
+        run: valgrind --leak-check=full --show-leak-kinds=all ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
+
+      - name: Code Coverage
+        run: |
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info 'googletest/*' '/usr/include/*' '/usr/lib/*' -o coverage.info
+
+      - name: Code Coverage (send to codecov.io)
+        uses: codecov/codecov-action@v1.0.5
+        with:
+          # User defined upload name. Visible in Codecov UI
+          name: Thibaut
+          # Repository upload token - get it from codecov.io
+          token: 2c2acde35dcc419894d68ade22a3deeb
+          # Path to coverage file to upload
+          file: coverage.info # optional
+          # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
+          flags: # optional
+          # Specify the location of the .codecov.yml config file
+          yml: # optional
+          # Specify whether or not CI build should fail if Codecov runs into an error during upload
+          fail_ci_if_error: # optional
