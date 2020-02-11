@@ -38,15 +38,13 @@ jobs:
         if: "!contains( matrix.os, 'windows')"
 
       - name: Checkout Dir
-        run: find ${{ runner.workspace }}
-        if: "!contains( matrix.os, 'windows')"
+        run: tree
 #     - name: Checkout Dir
-#       run: gci -recurse ${{ runner.workspace }}
+#       run: tree
 #       if: contains( matrix.os, 'windows')
 
       - name: Building
         run: |
-          $CXX --version
           cmake --version
           mkdir -p build && cd build
           cmake -DCODE_COVERAGE=ON ..
