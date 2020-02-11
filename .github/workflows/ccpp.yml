@@ -53,7 +53,9 @@ jobs:
           cmake --build . 
 
       - name: Running (with Valgrind)
-        run: valgrind --leak-check=full --show-leak-kinds=all ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
+        run: |
+          cd build
+          valgrind --leak-check=full --show-leak-kinds=all ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
 
       - name: Code Coverage
         run: |
