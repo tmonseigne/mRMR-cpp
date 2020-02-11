@@ -11,14 +11,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]
+#        os: [ubuntu-latest, windows-latest]
         include:
 #          - os: windows-latest
 #            triplet: x64-windows
           - os: ubuntu-latest
             triplet: x64-linux
-#          - os: macos-latest
-#            triplet: x64-osx
 
 ###### Configure Steps
     steps:
@@ -33,6 +32,7 @@ jobs:
 
       - name: Install packages
         run: |
+          sudo apt-get install tree
           sudo apt-get install lcov
           sudo apt-get install valgrind
         if: "!contains( matrix.os, 'windows')"
@@ -43,3 +43,11 @@ jobs:
 #     - name: Checkout Dir
 #       run: gci -recurse ${{ runner.workspace }}
 #       if: contains( matrix.os, 'windows')
+
+      - name: Building
+        run: |
+          $CXX --version
+          cmake --version
+          mkdir -p build && cd build
+          cmake -DCODE_COVERAGE=ON ..
+          cmake --build . 
