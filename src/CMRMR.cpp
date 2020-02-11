@@ -16,9 +16,9 @@ void CMRMR::reset()
 {
 	m_nFeatures = 0;
 	m_nSamples  = 0;
-	if (!m_classes.empty()) { for (auto& c : m_classes) { c.second.clear(); } }
-	if (!m_datas.empty()) { for (auto& d : m_datas) { d.clear(); } }
-	if (!m_discretized.empty()) { for (auto& d : m_discretized) { d.clear(); } }
+	//if (!m_classes.empty()) { for (auto& c : m_classes) { c.second.clear(); } }	// useless
+	//if (!m_datas.empty()) { for (auto& d : m_datas) { d.clear(); } }				// useless
+	//if (!m_discretized.empty()) { for (auto& d : m_discretized) { d.clear(); } }	// useless
 	m_classes.clear();
 	m_datas.clear();
 	m_discretized.clear();
@@ -48,7 +48,11 @@ bool CMRMR::readCSV(const std::string& filename)
 	reset();
 	ifstream file;
 	file.open(filename);
-	if (!file.is_open()) { return false; }
+	if (!file.is_open())
+	{
+		cerr << "File cannot be opened." << endl;
+		return false;
+	}
 
 	string header;
 	if (!getline(file, header))
@@ -109,7 +113,11 @@ bool CMRMR::setDatas(const std::vector<std::vector<double>>& datas, const std::v
 bool CMRMR::addDatas(const std::vector<std::vector<double>>& datas, const std::vector<int>& classes)
 {
 	const size_t n = datas.size();
-	if (n != classes.size()) { return false; }
+	if (n != classes.size())
+	{
+		cerr << "not same number of sample between datas and classes : " << n << " VS " << classes.size() << endl;;
+		return false;
+	}
 	for (size_t i = 0; i < n; ++i) { if (!addSample(datas[i], classes[i])) { return false; } }
 	return true;
 }
@@ -119,7 +127,11 @@ bool CMRMR::addDatas(const std::vector<std::vector<double>>& datas, const std::v
 bool CMRMR::addSample(const std::vector<double>& sample, const int classId)
 {
 	if (m_nSamples == 0) { m_nFeatures = sample.size(); }
-	else if (m_nFeatures != sample.size()) { return false; }
+	else if (m_nFeatures != sample.size())
+	{
+		cerr << "not same number of features between sample and previous samples : " << sample.size() << " VS " << m_nFeatures << endl;;
+		return false;
+	}
 
 	// Update datas
 	m_datas.push_back(sample);
