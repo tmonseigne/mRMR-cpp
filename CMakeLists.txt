@@ -80,8 +80,8 @@ set(headers
 source_group("headers" FILES ${headers})
 
 set(sources
-	${GOOGLETEST_DIR}"/googlemock/src/gmock-all.cc"
-	${GOOGLETEST_DIR}"/googletest/src/gtest-all.cc"
+	${GOOGLETEST_DIR}/googlemock/src/gmock-all.cc
+	${GOOGLETEST_DIR}/googletest/src/gtest-all.cc
 	"src/CMRMR.cpp"
 	"src/main.cpp"
 )
