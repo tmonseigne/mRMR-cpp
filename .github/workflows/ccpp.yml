@@ -52,10 +52,15 @@ jobs:
           cmake -DCODE_COVERAGE=ON ..
           cmake --build . 
 
-      - name: Running (with Valgrind)
+      - name: Running (basic)
         run: |
           cd build
-          valgrind --leak-check=full --show-leak-kinds=all ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
+          ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
+          
+#      - name: Running (with Valgrind)
+#        run: |
+#          cd build
+#          valgrind --leak-check=full --show-leak-kinds=all ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
 
       - name: Code Coverage
         run: |
