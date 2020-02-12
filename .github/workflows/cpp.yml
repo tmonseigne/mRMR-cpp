@@ -1,0 +1,84 @@
+name: Build
+
+on: [push]
+
+jobs:
+  job:
+    name: ${{ matrix.os }}-CI
+    runs-on: ${{ matrix.os }}
+
+##### Configure Strategy (all os)
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+#        os: [ubuntu-latest, windows-latest]
+        include:
+#          - os: windows-latest
+#            triplet: x64-windows
+          - os: ubuntu-latest
+            triplet: x64-linux
+
+###### Configure Steps
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
+      - name: Install packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install tree
+          sudo apt-get install lcov
+          sudo apt-get install valgrind
+#          sudo apt-get install doxygen
+#          sudo apt-get install doxygen-latex
+#          sudo apt-get install ghostscript
+#          sudo apt-get install graphviz
+        if: "!contains( matrix.os, 'windows')"
+
+      - name: Checkout Dir
+        run: tree
+
+      - name: Building
+        run: |
+          cmake --version
+          mkdir -p build && cd build
+          cmake -DCODE_COVERAGE=ON ..
+          cmake --build . 
+
+#      - name: Running (basic)
+#        run: |
+#          cd build
+#          ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
+#          
+      - name: Running (with Valgrind)
+        run: |
+          cd build
+          valgrind --leak-check=full --show-leak-kinds=all ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
+
+      - name: Code Coverage
+        run: |
+          lcov --directory . --capture --output-file coverage.info
+          lcov --remove coverage.info 'googletest/*' '/usr/include/*' '/usr/lib/*' -o coverage.info
+
+      - name: Code Coverage (send to codecov.io)
+        uses: codecov/codecov-action@v1.0.5
+        with:
+          # User defined upload name. Visible in Codecov UI
+          name: Thibaut
+          # Repository upload token - get it from codecov.io
+          token: 3ea532f6-1585-4709-a6aa-87be3c66b2c1
+          # Path to coverage file to upload
+          file: coverage.info # optional
+          # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
+          flags: # optional
+          # Specify the location of the .codecov.yml config file
+          yml: # optional
+          # Specify whether or not CI build should fail if Codecov runs into an error during upload
+          fail_ci_if_error: # optional

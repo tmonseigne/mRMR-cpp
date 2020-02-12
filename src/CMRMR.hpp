@@ -18,6 +18,7 @@
 #include <vector>
 #include <sstream>
 #include <map>
+#include <limits>
 
 enum class EMRMRMethod { MID, MIQ };
 

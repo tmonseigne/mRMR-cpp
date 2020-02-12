@@ -33,24 +33,6 @@ foreach(child ${children})
 	endif()
 endforeach()
 
-## Sources
-################################################################################
-set(headers
-	"src/CMRMR.hpp"
-	"src/test_mRMR.hpp"
-)
-source_group("headers" FILES ${headers})
-
-set(sources
-	${GOOGLETEST_DIR}"/googlemock/src/gmock-all.cc"
-	${GOOGLETEST_DIR}"/googletest/src/gtest-all.cc"
-	"src/CMRMR.cpp"
-	"src/main.cpp"
-)
-source_group("sources" FILES ${sources})
-
-set(ALL_FILES ${headers} ${sources})
-
 ## Code Coverage Configuration
 ################################################################################
 add_library(coverage_config INTERFACE)
@@ -70,7 +52,6 @@ if(CODE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 	endif()
 endif()
 
-
 ## Google tests Configuration
 ################################################################################
 add_definitions(-DGTEST_LANGUAGE_CXX11)
@@ -88,6 +69,25 @@ if(EXISTS ${GOOGLETEST_DIR})
 else ()
 	message( FATAL_ERROR "No googletest src dir found - set GOOGLETEST_DIR to enable!")
 endif()
+
+
+## Sources
+################################################################################
+set(headers
+	"src/CMRMR.hpp"
+	"src/test_mRMR.hpp"
+)
+source_group("headers" FILES ${headers})
+
+set(sources
+	${GOOGLETEST_DIR}/googlemock/src/gmock-all.cc
+	${GOOGLETEST_DIR}/googletest/src/gtest-all.cc
+	"src/CMRMR.cpp"
+	"src/main.cpp"
+)
+source_group("sources" FILES ${sources})
+
+set(ALL_FILES ${headers} ${sources})
 
 ## Message Status
 ################################################################################
