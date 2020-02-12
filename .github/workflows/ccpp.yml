@@ -54,6 +54,7 @@ jobs:
 
       - name: Running (basic)
         run: |
+          cp -r /res /build/res
           cd build
           ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
           
