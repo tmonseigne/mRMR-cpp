@@ -16,6 +16,12 @@
 #include "gtest/gtest.h"
 #include "CMRMR.hpp"
 
+#ifdef _WIN32
+const std::string FILENAME = "res/test_lung_s3.csv";		// With SLN we are on root folder
+#else
+const std::string FILENAME = "../res/test_lung_s3.csv";
+#endif
+
 const std::string SEP = "\n====================\n";
 
 inline std::ostream& operator<<(std::ostream& os, const std::vector<size_t>& input)
@@ -47,7 +53,7 @@ class Test_mRMRM : public testing::Test
 {
 protected:
 	CMRMR m_data;
-	void SetUp() override { m_data.readCSV("res/test_lung_s3.csv"); }
+	void SetUp() override { m_data.readCSV(FILENAME); }
 };
 
 
