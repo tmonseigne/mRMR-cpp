@@ -52,15 +52,15 @@ jobs:
           cmake -DCODE_COVERAGE=ON ..
           cmake --build . 
 
-      - name: Running (basic)
-        run: |
-          cd build
-          ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
-          
-#      - name: Running (with Valgrind)
+#      - name: Running (basic)
 #        run: |
 #          cd build
-#          valgrind --leak-check=full --show-leak-kinds=all ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
+#          ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
+#          
+      - name: Running (with Valgrind)
+        run: |
+          cd build
+          valgrind --leak-check=full --show-leak-kinds=all ./mRMR --gtest_output="xml:../docs/GoogleTestReport.xml"
 
       - name: Code Coverage
         run: |
@@ -73,7 +73,7 @@ jobs:
           # User defined upload name. Visible in Codecov UI
           name: Thibaut
           # Repository upload token - get it from codecov.io
-          token: 2c2acde35dcc419894d68ade22a3deeb
+          token: 3ea532f6-1585-4709-a6aa-87be3c66b2c1
           # Path to coverage file to upload
           file: coverage.info # optional
           # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
