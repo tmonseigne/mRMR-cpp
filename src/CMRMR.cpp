@@ -151,6 +151,7 @@ bool CMRMR::addSample(const std::vector<double>& sample, const int classId)
 ///-------------------------------------------------------------------------------------------------
 vector<size_t> CMRMR::process(const double threshold, const size_t nFeatures, const EMRMRMethod method)
 {
+	if (m_nSamples == 0 || m_nFeatures == 0) { return vector<size_t>(); }
 	m_discretized.reserve(m_nSamples);
 	for (auto&& v : m_datas) { m_discretized.emplace_back(std::begin(v), std::end(v)); }
 
